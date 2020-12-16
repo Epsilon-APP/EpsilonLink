@@ -1,0 +1,15 @@
+repositories {
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+dependencies {
+    compile project(":EpsilonLink-common");
+    compileOnly 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
+}
+
+task fatJar(type: Jar) {
+    destinationDir = file("C:/Users/EliXorZz/Desktop/EpsilonBuild-Java")
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

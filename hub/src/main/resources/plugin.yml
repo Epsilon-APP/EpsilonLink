@@ -1,0 +1,6 @@
+name: "EpsilonHub"
+version: 1.0
+author: "EliXorZz"
+main: fr.epsilon.hub.EpsilonHub
+
+depend: ["EpsilonLink"]

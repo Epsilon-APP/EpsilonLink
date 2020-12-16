@@ -1,0 +1,6 @@
+rootProject.name = 'EpsilonLink'
+
+['common', 'api', 'bungee', 'bukkit', 'hub'].each {
+    include ":EpsilonLink-${it}"
+    project(":EpsilonLink-${it}").projectDir = file(it)
+}
