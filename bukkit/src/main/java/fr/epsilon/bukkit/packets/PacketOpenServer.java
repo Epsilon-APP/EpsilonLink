@@ -1,6 +1,6 @@
 package fr.epsilon.bukkit.packets;
 
-import fr.epsilon.common.Packet;
+import fr.epsilon.common.packets.Packet;
 
 public class PacketOpenServer extends Packet {
     private String type;

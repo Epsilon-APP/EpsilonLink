@@ -1,7 +1,7 @@
 package fr.epsilon.bukkit.packets;
 
 import fr.epsilon.api.EState;
-import fr.epsilon.common.Packet;
+import fr.epsilon.common.packets.Packet;
 
 public class PacketUpdateState extends Packet {
     private EState state;

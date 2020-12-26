@@ -1,16 +1,26 @@
 package fr.epsilon.bukkit.packets;
 
 import fr.epsilon.api.EState;
-import fr.epsilon.common.Packet;
+import fr.epsilon.common.packets.Packet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PacketRetrievedServers extends Packet {
-    private final List<Server> serverList;
+public class PacketGetServersRegistered extends Packet {
+    private String type;
+    private List<Server> serverList;
 
-    public PacketRetrievedServers() {
+    public PacketGetServersRegistered(String type) {
+        this.type = type;
         this.serverList = new ArrayList<>();
+    }
+
+    public PacketGetServersRegistered() {
+        this.serverList = new ArrayList<>();
+    }
+
+    public String getType() {
+        return type;
     }
 
     public List<Server> getServerList() {

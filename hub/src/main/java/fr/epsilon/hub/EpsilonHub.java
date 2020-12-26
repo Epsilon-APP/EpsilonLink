@@ -31,15 +31,15 @@ public class EpsilonHub extends JavaPlugin implements Listener {
         if (item.getType() == Material.COMPASS) {
             FastInv inventory = new FastInv(27, "List de Hub");
 
-            EpsilonAPI.get().getServers(servers -> {
+            EpsilonAPI.get().getServers().whenComplete((servers, error) -> {
                 for (EServer server : servers) {
-                    inventory.addItem(new ItemBuilder(server.getWoolColor()).name(server.getName()).lore("Nombres joueurs : " + server.getOnlineCount() + "/" + server.getSlots(), server.getServerState().name()).build(), (e) -> {
+                    inventory.addItem(new ItemBuilder(Material.BED).name(server.getName()).lore("Nombres joueurs : " + server.getOnlineCount() + "/" + server.getSlots(), server.getServerState().name()).build(), (e) -> {
                         server.connect(player);
                     });
                 }
-            });
 
-            inventory.open(player);
+                inventory.open(player);
+            });
         }
     }
 }

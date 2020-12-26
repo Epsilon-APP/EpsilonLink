@@ -4,11 +4,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.epsilon.api.EServer;
 import fr.epsilon.api.EState;
-import fr.epsilon.api.EpsilonAPI;
-import fr.epsilon.bukkit.EpsilonLink;
-import fr.epsilon.bukkit.packets.PacketCloseServer;
-import fr.epsilon.bukkit.packets.PacketRedirectToHub;
-import fr.epsilon.bukkit.packets.PacketUpdateState;
+import fr.epsilon.bukkit.EpsilonPacket;
+import fr.epsilon.bukkit.managers.PacketManager;
 import fr.epsilon.common.EpsilonUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 
 public class Server extends EServer {
     private Plugin plugin;
+    private PacketManager packetManager;
 
     private final String name;
     private final int slots;
@@ -26,8 +24,9 @@ public class Server extends EServer {
 
     private org.bukkit.Server server;
 
-    public Server(Plugin plugin, String name, int slots, int onlineCount, EState state) {
+    public Server(Plugin plugin, PacketManager packetManager, String name, int slots, int onlineCount, EState state) {
         this.plugin = plugin;
+        this.packetManager = packetManager;
 
         this.name = name;
         this.slots = slots;
@@ -80,7 +79,7 @@ public class Server extends EServer {
     @Override
     public void setServerState(EState state) {
         this.state = state;
-        EpsilonLink.getAPI().getClient().sendSimplePacket(new PacketUpdateState(state));
+        packetManager.sendSimplePacket(EpsilonPacket.UPDATE_STATE, state);
     }
 
     @Override
@@ -99,8 +98,7 @@ public class Server extends EServer {
 
     @Override
     public void close() {
-        EpsilonLink.getAPI().getClient().sendSimplePacket(new PacketRedirectToHub(Bukkit.getOnlinePlayers()));
-        plugin.getServer().getScheduler().runTaskLater(plugin, Bukkit::shutdown,20 * 4);
+        Bukkit.shutdown();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package fr.epsilon.common;
+package fr.epsilon.common.packets;
 
 public interface PacketHandle {
     void received(String json);

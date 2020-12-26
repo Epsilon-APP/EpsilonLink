@@ -1,4 +1,4 @@
-package fr.epsilon.common;
+package fr.epsilon.common.packets;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,6 +1,7 @@
 package fr.epsilon.common;
 
 import com.google.gson.Gson;
+import fr.epsilon.common.packets.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,15 +25,15 @@ public class Client {
     private BufferedReader bufferedReader;
     private PrintWriter writer;
 
-    public Client(PacketHandle handle, Runnable connectOrClose) {
+    public Client(PacketHandle handle, Runnable connect) {
 //        "host.docker.internal"
         this.address = new InetSocketAddress("host.docker.internal", 8250);
         this.futureMap = new HashMap<>();
 
         connect(address);
 
-        if (connectOrClose != null)
-            connectOrClose.run();
+        if (connect != null)
+            connect.run();
 
         sendSimplePacket(new PacketNetInit());
 
@@ -46,22 +47,25 @@ public class Client {
                         Packet packet = gson.fromJson(line, Packet.class);
                         String packetUniqueId = packet.getUniqueId();
 
+                        System.out.println(packet.getName());
+
                         if (futureMap.containsKey(packetUniqueId)) {
                             futureMap.get(packetUniqueId).complete(line);
                         } else {
                             handle.received(line);
                         }
                     }else {
-                        if (connectOrClose != null)
-                            connectOrClose.run();
-
                         if (socket.isConnected())
                             socket.close();
 
                         connect(address);
 
-                        if (socket.isConnected())
+                        if (socket.isConnected()) {
+                            if (connect != null)
+                                connect.run();
+
                             sendSimplePacket(new PacketRestoreConnection());
+                        }
                     }
                 }
             } catch (IOException e) {
@@ -85,21 +89,18 @@ public class Client {
         } catch (IOException ignored) {}
     }
 
-    public synchronized CompletableFuture<String> sendPacket(Packet packet) {
+    public CompletableFuture<String> sendPacket(Packet packet) {
         CompletableFuture<String> future = new CompletableFuture<>();
 
         futureMap.put(packet.getUniqueId(), future);
         writer.println(gson.toJson(packet));
 
+        System.out.println("Packet Sending ...");
+
         return future;
     }
 
-    public synchronized void sendSimplePacket(Packet packet) {
+    public void sendSimplePacket(Packet packet) {
         writer.println(gson.toJson(packet));
-    }
-
-    public void sendPacketResponse(Packet packet, String uuid) {
-        packet.setUniqueId(uuid);
-        sendSimplePacket(packet);
     }
 }

@@ -1,51 +1,53 @@
 package fr.epsilon.bukkit;
 
-import com.google.gson.Gson;
 import fr.epsilon.api.EServer;
 import fr.epsilon.api.EpsilonAPI;
 import fr.epsilon.api.game.EGameManager;
 import fr.epsilon.bukkit.api.GameManager;
 import fr.epsilon.bukkit.api.Queue;
 import fr.epsilon.bukkit.api.Server;
-import fr.epsilon.bukkit.packets.PacketOpenServer;
-import fr.epsilon.bukkit.packets.PacketRedirectToHub;
-import fr.epsilon.bukkit.packets.PacketRetrievedServers;
-import fr.epsilon.common.Client;
-import org.bukkit.entity.Player;
+import fr.epsilon.bukkit.managers.PacketManager;
+import fr.epsilon.bukkit.managers.PermissionsManager;
+import fr.epsilon.bukkit.packets.PacketGetServersRegistered;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class EpsilonImplementation extends EpsilonAPI {
-    private final Client client;
-
     private final Plugin plugin;
+
+    private final PacketManager packetManager;
+    private final PermissionsManager permissionsManager;
+
     private final Queue queue;
     private final Server server;
 
     private final GameManager gameManager;
 
     public EpsilonImplementation(Plugin plugin) {
-        this.client = new Client(new PacketListener(), null);
-
         this.plugin = plugin;
-        this.queue = new Queue();
+
+        this.permissionsManager = new PermissionsManager(this);
+        this.packetManager = new PacketManager(this);;
+
+        this.queue = new Queue(packetManager);
         this.server = new Server(plugin);
         this.gameManager = new GameManager(plugin);
 
         plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
     }
 
-    public Client getClient() {
-        return client;
+    public Plugin getPlugin() {
+        return plugin;
     }
 
-    @Override
-    public void redirectHub(Player... players) {
-        EpsilonLink.getAPI().getClient().sendSimplePacket(new PacketRedirectToHub(Arrays.asList(players)));
+    public PacketManager getPacketManager() {
+        return packetManager;
+    }
+
+    public PermissionsManager getPermissionsManager() {
+        return permissionsManager;
     }
 
     @Override
@@ -54,23 +56,42 @@ public class EpsilonImplementation extends EpsilonAPI {
     }
 
     @Override
-    public void getServers(Consumer<List<EServer>> callback) {
-        client.sendPacket(new PacketRetrievedServers()).whenComplete((json, error) -> {
-            PacketRetrievedServers packet = new Gson().fromJson(json, PacketRetrievedServers.class);
+    public CompletableFuture<List<EServer>> getServers() {
+        CompletableFuture<List<EServer>> future = new CompletableFuture<>();
 
+        packetManager.sendPacket(EpsilonPacket.GET_SERVERS_REGISTERED, PacketGetServersRegistered.class).whenComplete((packet, error) -> {
             List<EServer> serverList = new ArrayList<>();
 
-            for (PacketRetrievedServers.Server server : packet.getServerList()) {
-                serverList.add(new Server(plugin, server.name, server.slots, server.onlineCount, server.state));
+            for (PacketGetServersRegistered.Server server : packet.getServerList()) {
+                serverList.add(new Server(plugin, packetManager, server.name, server.slots, server.onlineCount, server.state));
             }
 
-            callback.accept(serverList);
+            future.complete(serverList);
         });
+
+        return future;
+    }
+
+    @Override
+    public CompletableFuture<List<EServer>> getServers(String type) {
+        CompletableFuture<List<EServer>> future = new CompletableFuture<>();
+
+        packetManager.sendPacket(EpsilonPacket.GET_SERVERS_REGISTERED, PacketGetServersRegistered.class, type).whenComplete((packet, error) -> {
+            List<EServer> serverList = new ArrayList<>();
+
+            for (PacketGetServersRegistered.Server server : packet.getServerList()) {
+                serverList.add(new Server(plugin, packetManager, server.name, server.slots, server.onlineCount, server.state));
+            }
+
+            future.complete(serverList);
+        });
+
+        return future;
     }
 
     @Override
     public void openServer(String type) {
-        client.sendSimplePacket(new PacketOpenServer(type));
+        packetManager.sendSimplePacket(EpsilonPacket.OPEN_SERVER, type);
     }
 
     @Override

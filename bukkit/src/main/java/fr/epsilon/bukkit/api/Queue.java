@@ -1,19 +1,24 @@
 package fr.epsilon.bukkit.api;
 
 import fr.epsilon.api.EQueue;
-import fr.epsilon.bukkit.EpsilonLink;
-import fr.epsilon.bukkit.packets.PacketJoinQueue;
-import fr.epsilon.bukkit.packets.PacketLeaveQueue;
+import fr.epsilon.bukkit.EpsilonPacket;
+import fr.epsilon.bukkit.managers.PacketManager;
 import org.bukkit.entity.Player;
 
 public class Queue extends EQueue {
+    private final PacketManager packetManager;
+
+    public Queue(PacketManager packetManager) {
+        this.packetManager = packetManager;
+    }
+
     @Override
     public void join(Player player, String queueType) {
-        EpsilonLink.getAPI().getClient().sendSimplePacket(new PacketJoinQueue(queueType, player));
+        packetManager.sendSimplePacket(EpsilonPacket.JOIN_QUEUE, queueType, player.getName());
     }
 
     @Override
     public void leave(Player player) {
-        EpsilonLink.getAPI().getClient().sendSimplePacket(new PacketLeaveQueue(player));
+        packetManager.sendSimplePacket(EpsilonPacket.LEAVE_QUEUE, player.getName());
     }
 }

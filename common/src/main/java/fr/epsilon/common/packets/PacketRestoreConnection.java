@@ -1,4 +1,6 @@
-package fr.epsilon.common;
+package fr.epsilon.common.packets;
+
+import fr.epsilon.common.EpsilonUtils;
 
 public class PacketRestoreConnection extends Packet {
     private String identifier;

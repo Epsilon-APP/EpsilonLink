@@ -1,6 +1,6 @@
 package fr.epsilon.bungee.packets;
 
-import fr.epsilon.common.Packet;
+import fr.epsilon.common.packets.Packet;
 
 public class PacketRegisterServer extends Packet {
     private String serverName;
