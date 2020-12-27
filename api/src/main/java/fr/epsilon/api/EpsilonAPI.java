@@ -2,7 +2,6 @@ package fr.epsilon.api;
 
 import fr.epsilon.api.game.EGame;
 import fr.epsilon.api.game.EGameManager;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

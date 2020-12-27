@@ -1,5 +1,5 @@
 name: "EpsilonLink"
-version: 2.0
+version: ${pluginVersion}
 author: "EliXorZz"
 main: fr.epsilon.bukkit.EpsilonLink
 

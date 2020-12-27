@@ -32,7 +32,7 @@ public class EpsilonImplementation extends EpsilonAPI {
         this.packetManager = new PacketManager(this);;
 
         this.queue = new Queue(packetManager);
-        this.server = new Server(plugin);
+        this.server = new Server(plugin, packetManager);
         this.gameManager = new GameManager(plugin);
 
         plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");

@@ -34,8 +34,10 @@ public class Server extends EServer {
         this.state = state;
     }
 
-    public Server(Plugin plugin) {
+    public Server(Plugin plugin, PacketManager packetManager) {
         this.plugin = plugin;
+        this.packetManager = packetManager;
+
         this.server = plugin.getServer();
 
         this.name = EpsilonUtils.getServerType() + "-" + EpsilonUtils.getServerIdentifier();
@@ -79,6 +81,9 @@ public class Server extends EServer {
     @Override
     public void setServerState(EState state) {
         this.state = state;
+
+        System.out.println(packetManager == null);
+
         packetManager.sendSimplePacket(EpsilonPacket.UPDATE_STATE, state);
     }
 

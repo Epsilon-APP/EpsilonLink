@@ -1,6 +1,6 @@
 allprojects {
     group 'net.epsilon'
-    version '1.0'
+    version 'BETA-2.0'
 }
 
 subprojects {

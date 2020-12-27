@@ -67,7 +67,7 @@ public abstract class EGame<GPLAYER extends EGamePlayer> implements Listener {
      *
      * @return All players not spectators is returned
      */
-    public List<GPLAYER> getInGamePlayer() {
+    public List<GPLAYER> getInGamePlayers() {
         List<GPLAYER> gamePlayersClone = new ArrayList<>();
         for (GPLAYER gamePlayer : gamePlayers.values()) {
             if (!gamePlayer.isSpectator())
