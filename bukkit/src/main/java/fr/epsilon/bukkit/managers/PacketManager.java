@@ -2,7 +2,6 @@ package fr.epsilon.bukkit.managers;
 
 import com.google.gson.Gson;
 import fr.epsilon.bukkit.EpsilonImplementation;
-import fr.epsilon.bukkit.EpsilonLink;
 import fr.epsilon.bukkit.EpsilonPacket;
 import fr.epsilon.bukkit.packets.PacketOnlinePlayers;
 import fr.epsilon.bukkit.packets.PacketSyncPermissions;
@@ -17,14 +16,14 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 public class PacketManager implements PacketHandle {
-    private Client client;
     private Gson gson;
+    private Client client;
 
     private EpsilonImplementation epsilonImplementation;
 
     public PacketManager(EpsilonImplementation epsilonImplementation) {
-        this.client = new Client(this, null);
         this.gson = new Gson();
+        this.client = new Client(this, null);
 
         this.epsilonImplementation = epsilonImplementation;
     }
