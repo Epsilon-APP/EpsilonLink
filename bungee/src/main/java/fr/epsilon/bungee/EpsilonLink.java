@@ -40,7 +40,7 @@ public class EpsilonLink extends Plugin {
     }
 
     public ServerInfo getServers(String identifier) {
-        return ProxyServer.getInstance().getServersCopy().values().stream().filter(serverInfo -> {
+        return ProxyServer.getInstance().getServers().values().stream().filter(serverInfo -> {
             String[] split = serverInfo.getName().split("-");
 
             if (split.length == 2) {
@@ -52,7 +52,7 @@ public class EpsilonLink extends Plugin {
     }
 
     public List<ServerInfo> getHubOrdained() {
-        return ProxyServer.getInstance().getServersCopy().values().stream()
+        return ProxyServer.getInstance().getServers().values().stream()
                 .filter(serverInfo -> {
                     String[] split = serverInfo.getName().split("-");
 

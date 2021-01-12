@@ -9,8 +9,10 @@ import java.util.Arrays;
 public enum EpsilonPacket {
     OPEN_SERVER(PacketOpenServer.class),
     CLOSE_SERVER(PacketCloseServer.class),
+
     JOIN_QUEUE(PacketJoinQueue.class),
     LEAVE_QUEUE(PacketLeaveQueue.class),
+
     UPDATE_STATE(PacketUpdateState.class),
     ONLINE_PLAYERS(PacketOnlinePlayers.class),
     GET_SERVERS_REGISTERED(PacketGetServersRegistered.class),

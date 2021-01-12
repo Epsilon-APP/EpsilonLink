@@ -2,7 +2,9 @@ package fr.epsilon.api;
 
 import org.bukkit.entity.Player;
 
-public abstract class EQueue {
+import java.util.List;
+
+public abstract class EQueueManager {
     /**
      * Player join queue with template type
      *
@@ -17,4 +19,12 @@ public abstract class EQueue {
      * @param player Bukkit Player
      */
     public abstract void leave(Player player);
+
+    /**
+     * Player join queue with template type
+     *
+     * @param players Bukkit List of Player
+     * @param queueType Template type
+     */
+    public abstract void joinGroup(List<Player> players, String queueType);
 }

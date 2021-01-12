@@ -1,3 +1,11 @@
 package fr.epsilon.common.packets;
 
-public class PacketKeepAlive extends Packet { }
+import java.util.Random;
+
+public class PacketKeepAlive extends Packet {
+    private int id;
+
+    public PacketKeepAlive() {
+        this.id = new Random().nextInt();
+    }
+}

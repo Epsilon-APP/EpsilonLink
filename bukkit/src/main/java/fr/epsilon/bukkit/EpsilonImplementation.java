@@ -4,7 +4,7 @@ import fr.epsilon.api.EServer;
 import fr.epsilon.api.EpsilonAPI;
 import fr.epsilon.api.game.EGameManager;
 import fr.epsilon.bukkit.api.GameManager;
-import fr.epsilon.bukkit.api.Queue;
+import fr.epsilon.bukkit.api.QueueManager;
 import fr.epsilon.bukkit.api.Server;
 import fr.epsilon.bukkit.managers.PacketManager;
 import fr.epsilon.bukkit.managers.PermissionsManager;
@@ -20,7 +20,7 @@ public class EpsilonImplementation extends EpsilonAPI {
     private final PacketManager packetManager;
     private final PermissionsManager permissionsManager;
 
-    private final Queue queue;
+    private final QueueManager queueManager;
     private final Server server;
 
     private final GameManager gameManager;
@@ -31,9 +31,9 @@ public class EpsilonImplementation extends EpsilonAPI {
         this.permissionsManager = new PermissionsManager(this);
         this.packetManager = new PacketManager(this);;
 
-        this.queue = new Queue(packetManager);
-        this.server = new Server(plugin, packetManager);
-        this.gameManager = new GameManager(plugin);
+        this.queueManager = new QueueManager(this);
+        this.server = new Server(this);
+        this.gameManager = new GameManager(this);
 
         plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
     }
@@ -63,7 +63,7 @@ public class EpsilonImplementation extends EpsilonAPI {
             List<EServer> serverList = new ArrayList<>();
 
             for (PacketGetServersRegistered.Server server : packet.getServerList()) {
-                serverList.add(new Server(plugin, packetManager, server.name, server.slots, server.onlineCount, server.state));
+                serverList.add(new Server(this, server.name, server.slots, server.onlineCount, server.state));
             }
 
             future.complete(serverList);
@@ -80,7 +80,7 @@ public class EpsilonImplementation extends EpsilonAPI {
             List<EServer> serverList = new ArrayList<>();
 
             for (PacketGetServersRegistered.Server server : packet.getServerList()) {
-                serverList.add(new Server(plugin, packetManager, server.name, server.slots, server.onlineCount, server.state));
+                serverList.add(new Server(this, server.name, server.slots, server.onlineCount, server.state));
             }
 
             future.complete(serverList);
@@ -95,8 +95,8 @@ public class EpsilonImplementation extends EpsilonAPI {
     }
 
     @Override
-    public Queue getQueueSystem() {
-        return queue;
+    public QueueManager getQueueSystem() {
+        return queueManager;
     }
 
     @Override

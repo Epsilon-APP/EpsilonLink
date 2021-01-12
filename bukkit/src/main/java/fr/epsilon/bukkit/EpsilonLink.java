@@ -20,6 +20,4 @@ public class EpsilonLink extends JavaPlugin implements Listener {
     public static EpsilonImplementation getAPI() {
         return api;
     }
-
-
 }

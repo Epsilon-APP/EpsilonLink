@@ -42,13 +42,13 @@ public class PacketManager implements PacketHandle {
             case REGISTER_SERVER: {
                 PacketRegisterServer packet = gson.fromJson(json, PacketRegisterServer.class);
                 ServerInfo server = epsilonLink.getProxy().constructServerInfo(packet.getServerName(), new InetSocketAddress(packet.getServerName(), packet.getServerPort()), "", false);
-                epsilonLink.getProxy().getConfig().addServer(server);
+                epsilonLink.getProxy().getServers().put(server.getName(), server);
                 break;
             }
 
             case UNREGISTER_SERVER: {
                 PacketUnregisterServer packet = gson.fromJson(json, PacketUnregisterServer.class);
-                epsilonLink.getProxy().getConfig().removeServerNamed(packet.getServerName());
+                epsilonLink.getProxy().getServers().remove(packet.getServerName());
                 break;
             }
 

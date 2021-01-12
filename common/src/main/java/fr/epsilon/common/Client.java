@@ -82,9 +82,11 @@ public class Client {
     private void connect(SocketAddress address) {
         try {
             this.socket = new Socket();
+
+            socket.setTcpNoDelay(true);
             socket.connect(address);
 
-            this.writer = new PrintWriter(socket.getOutputStream(), true);
+            this.writer = new PrintWriter(socket.getOutputStream());
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException ignored) {}
     }
@@ -94,13 +96,13 @@ public class Client {
 
         futureMap.put(packet.getUniqueId(), future);
         writer.println(gson.toJson(packet));
-
-        System.out.println("Packet Sending ...");
+        writer.flush();
 
         return future;
     }
 
     public void sendSimplePacket(Packet packet) {
         writer.println(gson.toJson(packet));
+        writer.flush();
     }
 }

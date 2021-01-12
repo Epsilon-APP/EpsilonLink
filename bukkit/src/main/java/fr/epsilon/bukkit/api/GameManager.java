@@ -5,6 +5,7 @@ import fr.epsilon.api.EpsilonAPI;
 import fr.epsilon.api.game.EGame;
 import fr.epsilon.api.game.EGameManager;
 import fr.epsilon.api.game.EGamePlayer;
+import fr.epsilon.bukkit.EpsilonImplementation;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
@@ -12,10 +13,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
@@ -31,8 +28,8 @@ public class GameManager extends EGameManager implements Listener {
 
     private BukkitTask timer;
 
-    public GameManager(Plugin plugin) {
-        this.plugin = plugin;
+    public GameManager(EpsilonImplementation api) {
+        this.plugin = api.getPlugin();
 
         this.endTimeout = 10;
         this.time = 10;

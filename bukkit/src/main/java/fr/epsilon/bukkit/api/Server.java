@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.epsilon.api.EServer;
 import fr.epsilon.api.EState;
+import fr.epsilon.bukkit.EpsilonImplementation;
 import fr.epsilon.bukkit.EpsilonPacket;
 import fr.epsilon.bukkit.managers.PacketManager;
 import fr.epsilon.common.EpsilonUtils;
@@ -24,9 +25,9 @@ public class Server extends EServer {
 
     private org.bukkit.Server server;
 
-    public Server(Plugin plugin, PacketManager packetManager, String name, int slots, int onlineCount, EState state) {
-        this.plugin = plugin;
-        this.packetManager = packetManager;
+    public Server(EpsilonImplementation api, String name, int slots, int onlineCount, EState state) {
+        this.plugin = api.getPlugin();
+        this.packetManager = api.getPacketManager();
 
         this.name = name;
         this.slots = slots;
@@ -34,9 +35,9 @@ public class Server extends EServer {
         this.state = state;
     }
 
-    public Server(Plugin plugin, PacketManager packetManager) {
-        this.plugin = plugin;
-        this.packetManager = packetManager;
+    public Server(EpsilonImplementation api) {
+        this.plugin = api.getPlugin();
+        this.packetManager = api.getPacketManager();
 
         this.server = plugin.getServer();
 

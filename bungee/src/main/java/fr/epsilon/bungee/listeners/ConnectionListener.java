@@ -2,7 +2,6 @@ package fr.epsilon.bungee.listeners;
 
 import fr.epsilon.bungee.EpsilonLink;
 import net.md_5.bungee.api.ReconnectHandler;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -11,7 +10,6 @@ import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ConnectionListener implements Listener, ReconnectHandler {
@@ -46,7 +44,7 @@ public class ConnectionListener implements Listener, ReconnectHandler {
     public void serverPostLogin(PreLoginEvent event) {
         List<ServerInfo> hubList = epsilonLink.getHubOrdained();
         if (hubList.isEmpty()) {
-            event.setCancelReason(getKickReason());
+            event.setCancelReason(getKickReason().toLegacyText());
             event.setCancelled(true);
         }
     }

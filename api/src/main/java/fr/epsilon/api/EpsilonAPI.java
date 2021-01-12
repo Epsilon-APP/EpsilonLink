@@ -1,6 +1,5 @@
 package fr.epsilon.api;
 
-import fr.epsilon.api.game.EGame;
 import fr.epsilon.api.game.EGameManager;
 
 import java.util.List;
@@ -56,7 +55,7 @@ public abstract class EpsilonAPI {
      *
      * @return Queue system
      */
-    public abstract EQueue getQueueSystem();
+    public abstract EQueueManager getQueueSystem();
 
     public abstract EGameManager getGameManager();
 }
