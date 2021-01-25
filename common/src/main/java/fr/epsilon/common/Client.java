@@ -27,7 +27,7 @@ public class Client {
 
     public Client(PacketHandle handle, Runnable connect) {
 //        "host.docker.internal"
-        this.address = new InetSocketAddress("host.docker.internal", 8250);
+        this.address = new InetSocketAddress(System.getProperty("os.name").toLowerCase().contains("win") ? "host.docker.internal" : "EPSILON", 8250);
         this.futureMap = new HashMap<>();
 
         connect(address);
