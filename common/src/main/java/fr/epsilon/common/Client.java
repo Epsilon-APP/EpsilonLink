@@ -26,8 +26,7 @@ public class Client {
     private PrintWriter writer;
 
     public Client(PacketHandle handle, Runnable connect) {
-//        "host.docker.internal"
-        this.address = new InetSocketAddress(System.getProperty("os.name").toLowerCase().contains("win") ? "host.docker.internal" : "EPSILON", 8250);
+        this.address = new InetSocketAddress(EpsilonUtils.isLinuxHost() ? "EPSILON": "host.docker.internal", 8250);
         this.futureMap = new HashMap<>();
 
         connect(address);
@@ -39,37 +38,38 @@ public class Client {
 
         Executor thread = Executors.newSingleThreadExecutor();
         thread.execute(() -> {
-            try {
-                while (true) {
+            while (true) {
+                try {
                     String line = bufferedReader.readLine();
 
-                    if (line != null) {
-                        Packet packet = gson.fromJson(line, Packet.class);
-                        String packetUniqueId = packet.getUniqueId();
+                    Packet packet = gson.fromJson(line, Packet.class);
+                    String packetUniqueId = packet.getUniqueId();
 
-                        System.out.println(packet.getName());
+                    System.out.println(packet.getName());
 
-                        if (futureMap.containsKey(packetUniqueId)) {
-                            futureMap.get(packetUniqueId).complete(line);
-                        } else {
-                            handle.received(line);
-                        }
-                    }else {
-                        if (socket.isConnected())
+                    if (futureMap.containsKey(packetUniqueId)) {
+                        futureMap.get(packetUniqueId).complete(line);
+                    } else {
+                        handle.received(line);
+                    }
+                }catch (Exception exception) {
+                    if (socket.isConnected()) {
+                        try {
                             socket.close();
-
-                        connect(address);
-
-                        if (socket.isConnected()) {
-                            if (connect != null)
-                                connect.run();
-
-                            sendSimplePacket(new PacketRestoreConnection());
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
+
+                    connect(address);
+
+                    if (socket.isConnected()) {
+                        if (connect != null)
+                            connect.run();
+
+                        sendSimplePacket(new PacketRestoreConnection());
+                    }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
 

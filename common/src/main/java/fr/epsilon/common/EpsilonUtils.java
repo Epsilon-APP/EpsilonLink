@@ -12,4 +12,8 @@ public class EpsilonUtils {
     public static int getServerPort() {
         return Integer.parseInt(System.getenv("PORT"));
     }
+
+    public static boolean isLinuxHost() {
+        return System.getenv("OS").equals("linux");
+    }
 }
