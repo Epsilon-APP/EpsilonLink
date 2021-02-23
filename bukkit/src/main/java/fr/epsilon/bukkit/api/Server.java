@@ -101,7 +101,7 @@ public class Server extends EServer {
 
     @Override
     public void close() {
-        Bukkit.shutdown();
+        packetManager.sendSimplePacket(EpsilonPacket.CLOSE_SERVER, getIdentifier());
     }
 
     @Override
