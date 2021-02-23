@@ -45,8 +45,6 @@ public class Client {
                     Packet packet = gson.fromJson(line, Packet.class);
                     String packetUniqueId = packet.getUniqueId();
 
-                    System.out.println(packet.getName());
-
                     if (futureMap.containsKey(packetUniqueId)) {
                         futureMap.get(packetUniqueId).complete(line);
                     } else {

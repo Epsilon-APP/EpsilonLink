@@ -82,9 +82,6 @@ public class Server extends EServer {
     @Override
     public void setServerState(EState state) {
         this.state = state;
-
-        System.out.println(packetManager == null);
-
         packetManager.sendSimplePacket(EpsilonPacket.UPDATE_STATE, state);
     }
 
