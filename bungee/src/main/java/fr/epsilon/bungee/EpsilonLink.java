@@ -2,7 +2,6 @@ package fr.epsilon.bungee;
 
 import fr.epsilon.bungee.commands.HubCommand;
 import fr.epsilon.bungee.listeners.ConnectionListener;
-import fr.epsilon.common.Client;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -11,20 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EpsilonLink extends Plugin {
-    private Client client;
+    private PacketManager packetManager;
 
     @Override
     public void onEnable() {
-        client = new Client(new PacketManager(this), () -> {
-            ProxyServer.getInstance().getServers().clear();
-        });
+        this.packetManager = new PacketManager(this);
 
         getProxy().getPluginManager().registerListener(this, new ConnectionListener(this));
         getProxy().getPluginManager().registerCommand(this, new HubCommand(this));
     }
 
-    public Client getClient() {
-        return client;
+    public PacketManager getPacketManager() {
+        return packetManager;
     }
 
     public String getTypeFromServerInfo(ServerInfo serverInfo) {
@@ -39,7 +36,7 @@ public class EpsilonLink extends Plugin {
         return null;
     }
 
-    public ServerInfo getServers(String identifier) {
+    public ServerInfo getServer(String identifier) {
         return ProxyServer.getInstance().getServers().values().stream().filter(serverInfo -> {
             String[] split = serverInfo.getName().split("-");
 
